@@ -151,3 +151,5 @@ fabric.properties
 *.conf
 
 notes
+
+*.secret

@@ -58,7 +58,7 @@ def find_conf_file():
     # Read config file
     for path in conf_paths:
         try:
-            f = open(path + 'toprtg.conf', 'r')
+            f = open(path + 'toprtg.conf.json', 'r')
             data = json.load(f)
             return data
         except FileNotFoundError:

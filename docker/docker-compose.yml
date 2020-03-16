@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  python:
+    build:
+      context: ..
+      dockerfile: ./docker/python/python.Dockerfile
+    container_name: toprtg_python
+    volumes:
+      - ./python/entrypoint.sh:/entrypoint.sh
+      - ../app/:/usr/src/app
+    entrypoint: /entrypoint.sh
+    networks:
+      default:
+        aliases:
+          - interpreter
+
+  mysql:
+    container_name: toprtg_mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - toprtg-db:/var/lib/mysql
+    networks:
+      default:
+        aliases:
+          - mysql
+
+  phpmyadmin:
+    container_name: toprtg_phpmyadmin
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: "${DB_PORT}"
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+    networks:
+      default:
+        aliases:
+          - phpmyadmin
+
+volumes:
+  toprtg-db:
+
+networks:
+  default:

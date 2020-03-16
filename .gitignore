@@ -147,9 +147,12 @@ fabric.properties
 # Markdown Navigator plugin
 
 # End of https://www.gitignore.io/api/pycharm,intellij
-
+.DS_Store
+.idea/
+*__pycache__*
 *.conf
-
+*.conf.json
+*settings.py
 notes
 
 *.secret

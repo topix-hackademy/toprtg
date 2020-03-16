@@ -1,7 +1,8 @@
 import json
 from pysnmp.entity.rfc3413.oneliner import cmdgen
+from exceptions import SNMPException
 
-conf_paths = ['/etc/toprtg/', './']
+conf_paths = ['/etc/toprtg/', './conf/']
 
 
 def snmp_poll(ip, community, oid, method):
@@ -27,8 +28,8 @@ def snmp_poll(ip, community, oid, method):
 
     if not errorIndication is None or errorStatus is True:
         print("Error: %s %s %s %s" % res)
-        exit(1)
-
+        # exit(1)
+        raise SNMPException('Timeout')
     else:
         return varBinds
 
@@ -60,7 +61,6 @@ def find_conf_file():
             f = open(path + 'toprtg.conf', 'r')
             data = json.load(f)
             return data
-
         except FileNotFoundError:
             continue
 
